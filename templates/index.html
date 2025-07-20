@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Uploader</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        input[type="file"] {
+            margin-bottom: 1rem;
+        }
+
+        #result {
+            margin-top: 1rem;
+        }
+
+        #result a {
+            color: #007bff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Upload an Image</h1>
+        <form id="upload-form" action="/upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="image" accept="image/*">
+            <input type="submit" value="Upload">
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('upload-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+            const response = await fetch('/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            const resultDiv = document.getElementById('result');
+
+            if (response.ok) {
+                const link = document.createElement('a');
+                link.href = result.url;
+                link.textContent = window.location.origin + result.url;
+                link.target = '_blank';
+                resultDiv.innerHTML = 'Image uploaded successfully: ';
+                resultDiv.appendChild(link);
+            } else {
+                resultDiv.textContent = 'Error uploading image: ' + result.error;
+            }
+        });
+    </script>
+</body>
+</html>
