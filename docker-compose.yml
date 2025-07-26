@@ -9,6 +9,7 @@ services:
       - MINIO_SECRET_KEY=password # Change this
       - MINIO_BUCKET=images # Change this
       - MINIO_USESSL=false
+    restart: always
     depends_on:
       minio:
         condition: service_healthy
@@ -29,6 +30,7 @@ services:
       retries: 5
     volumes:
       - minio_data:/data
+    restart: on-failure
 
 volumes:
   minio_data:

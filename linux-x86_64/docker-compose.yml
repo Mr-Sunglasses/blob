@@ -9,6 +9,7 @@ services:
       - MINIO_SECRET_KEY=password # Change this
       - MINIO_BUCKET=images # Change this
       - MINIO_USESSL=false
+    restart: always
     depends_on:
       - minio
 
@@ -21,8 +22,9 @@ services:
       - MINIO_ROOT_USER=admin # Change this
       - MINIO_ROOT_PASSWORD=password # Change this
     command: server /data --console-address ":9001"
+    restart: on-failure
     volumes:
       - minio_data:/data
-
+      
 volumes:
   minio_data:
